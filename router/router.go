@@ -41,7 +41,7 @@ func Router() *gin.Engine {
 
 	auth.Use(AuthMiddleWare())
 	{
-		auth.POST("/submitencry/:cid", submit.SubmitEncryPython)
+		auth.POST("/submitencry/:cid", submit.SubmitEncryPythonByCid)
 		auth.POST("/submitdecry/:cid", submit.SubmitDecryPython)
 		auth.GET("/gethistory/:cid", submit.GetHistory)
 		auth.GET("/check/:cid", check.CanUseDecode)
