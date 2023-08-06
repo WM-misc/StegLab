@@ -10,13 +10,26 @@ import (
 	"github.com/docker/docker/api/types/mount"
 	"github.com/docker/docker/client"
 	"github.com/docker/docker/pkg/stdcopy"
-	"github.com/gin-gonic/gin"
+	"io/ioutil"
+	"net/http"
 	"time"
 )
 
-func IsTokenValid(ctx *gin.Context) bool {
-	//TODO
-	return true
+func IsTokenValid(teamToken string, teamName string) bool {
+	url := UserExistUrl + teamToken + "&teamname=" + teamName
+	resp, err := http.Get(url)
+	if err != nil {
+		return false
+	}
+	defer resp.Body.Close()
+	d1, _ := ioutil.ReadAll(resp.Body)
+	data := JsonNew.Get(d1)
+
+	if data.Get("data").ToBool() == true {
+		return true
+	} else {
+		return false
+	}
 }
 
 func RunEncry(tokenpath string, dockerImage string) (int, string, time.Duration, uint64, error) {

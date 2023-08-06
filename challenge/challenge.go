@@ -1,9 +1,9 @@
 package challenge
 
 import (
+	"ctf/database"
+	"ctf/submit"
 	"github.com/gin-gonic/gin"
-	"main.go/database"
-	"main.go/submit"
 )
 
 var DB, _ = database.GetDB()

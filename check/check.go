@@ -1,8 +1,8 @@
 package check
 
 import (
+	"ctf/database"
 	"errors"
-	"main.go/database"
 	"strconv"
 	"strings"
 )

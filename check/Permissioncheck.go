@@ -1,8 +1,8 @@
 package check
 
 import (
+	"ctf/database"
 	"github.com/gin-gonic/gin"
-	"main.go/database"
 )
 
 //检查是否可以使用解密

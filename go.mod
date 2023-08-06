@@ -1,4 +1,4 @@
-module main.go
+module ctf
 
 go 1.18
 

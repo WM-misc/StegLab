@@ -1,12 +1,12 @@
 package router
 
 import (
+	"ctf/challenge"
+	"ctf/check"
+	"ctf/database"
+	"ctf/submit"
 	"errors"
 	"github.com/gin-gonic/gin"
-	"main.go/challenge"
-	"main.go/check"
-	"main.go/database"
-	"main.go/submit"
 	"net/http"
 )
 
@@ -24,14 +24,26 @@ func Router() *gin.Engine {
 		}
 
 		token := request.Token
+		teamname := request.TeamName
+		if teamname == "" {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "TeamName不能为空。"})
+			return
+		}
+
+		if submit.IsTokenValid(token, teamname) != true {
+			c.JSON(http.StatusBadRequest, gin.H{"error": "无效的Token"})
+			return
+		}
 		if token != "" {
 			c.SetCookie("token", token, 3600, "/", "172.21.26.127", false, true)
+			c.SetCookie("teamname", teamname, 3600, "/", "172.21.26.127", false, true)
 			DB.Where("token = ?", request.Token).First(&User)
 			if User.Token == "" {
 				DB.Create(&database.User{
 					Token: token,
 				})
 			}
+
 			c.JSON(http.StatusOK, gin.H{"code": submit.TokenTrue, "message": "Token设置成功。", "token": token})
 		} else {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Token不能为空。"})
@@ -61,7 +73,7 @@ func Cors() gin.HandlerFunc {
 		if origin != "" {
 			c.Header("Access-Control-Allow-Origin", "*") // 可将将 * 替换为指定的域名
 			c.Header("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE, UPDATE")
-			c.Header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization")
+			c.Header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, Teamname")
 			c.Header("Access-Control-Expose-Headers", "Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Cache-Control, Content-Language, Content-Type")
 			c.Header("Access-Control-Allow-Credentials", "true")
 		}
@@ -78,9 +90,10 @@ func AuthMiddleWare() gin.HandlerFunc {
 		//token, err := c.Cookie("token")
 		//设置为Authorization
 		token := c.Request.Header.Get("Authorization")
+		teanmname := c.Request.Header.Get("Teamname")
 		//fmt.Println(token)
 
-		if token == "" {
+		if token == "" || teanmname == "" {
 			err := errors.New("未提供有效令牌")
 			c.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
 			c.Abort()

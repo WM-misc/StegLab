@@ -1,11 +1,11 @@
 package submit
 
 import (
+	"ctf/check"
+	"ctf/database"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
-	"main.go/check"
-	"main.go/database"
 	"os"
 	"strconv"
 	"strings"
@@ -19,6 +19,7 @@ func SubmitDecryPython(c *gin.Context) {
 
 	c.BindJSON(&code)
 	token := c.Request.Header.Get("Authorization")
+	teamname := c.Request.Header.Get("Teamname")
 	cid := c.Param("cid")
 	intcid, err := strconv.Atoi(cid)
 	if err != nil {
@@ -29,7 +30,7 @@ func SubmitDecryPython(c *gin.Context) {
 	}
 
 	//判断token是否正确
-	if !IsTokenValid(c) {
+	if !IsTokenValid(token, teamname) {
 		c.JSON(200, gin.H{
 			"code": InvalidTokenError,
 			"msg":  "无效的令牌",

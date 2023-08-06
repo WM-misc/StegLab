@@ -1,11 +1,11 @@
 package submit
 
 import (
+	"ctf/check"
+	"ctf/database"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
-	"main.go/check"
-	"main.go/database"
 	"os"
 	"os/exec"
 	"strconv"
@@ -23,6 +23,7 @@ func SubmitEncryPythonByCid(c *gin.Context) {
 	c.BindJSON(&code)
 	//获取token
 	token := c.Request.Header.Get("Authorization")
+	teamname := c.Request.Header.Get("Teamname")
 	cid := c.Param("cid")
 	intcid, err := strconv.Atoi(cid)
 
@@ -33,7 +34,7 @@ func SubmitEncryPythonByCid(c *gin.Context) {
 		})
 	}
 	//判断token是否正确
-	if !IsTokenValid(c) {
+	if !IsTokenValid(token, teamname) {
 		c.JSON(200, gin.H{
 			"code": InvalidTokenError,
 			"msg":  "无效的令牌",
@@ -167,6 +168,7 @@ func SubmitEncryPython(c *gin.Context) {
 	c.BindJSON(&code)
 	//获取token
 	token := c.Request.Header.Get("Authorization")
+	teamname := c.Request.Header.Get("Teamname")
 	cid := c.Param("cid")
 	intcid, err := strconv.Atoi(cid)
 	if err != nil {
@@ -176,7 +178,7 @@ func SubmitEncryPython(c *gin.Context) {
 		})
 	}
 	//判断token是否正确
-	if !IsTokenValid(c) {
+	if !IsTokenValid(token, teamname) {
 		c.JSON(200, gin.H{
 			"code": InvalidTokenError,
 			"msg":  "无效的令牌",

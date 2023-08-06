@@ -1,6 +1,6 @@
 package main
 
-import "main.go/router"
+import "ctf/router"
 
 func main() {
 	rout := router.Router()

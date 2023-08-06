@@ -1,8 +1,8 @@
 package submit
 
 import (
+	"ctf/database"
 	"github.com/gin-gonic/gin"
-	"main.go/database"
 	"strconv"
 )
 
@@ -10,9 +10,10 @@ func GetHistory(c *gin.Context) {
 	DB, _ := database.GetDB()
 	var submit []database.SubmitRecord
 	token := c.Request.Header.Get("Authorization")
+	teamname := c.Request.Header.Get("Teamname")
 	cid := c.Param("cid")
 	//判断token是否正确
-	if !IsTokenValid(c) {
+	if !IsTokenValid(token, teamname) {
 		c.JSON(200, gin.H{
 			"code": InvalidTokenError,
 			"msg":  "无效的令牌",
