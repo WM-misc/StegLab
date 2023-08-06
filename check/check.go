@@ -34,7 +34,9 @@ func Enchecker(cid int, stdout string) (int, error) {
 			nopnums++
 		}
 	}
-	msg := "[" + strconv.Itoa(nopnums) + "/" + strconv.Itoa(len(secretData)) + "]"
+	//没通过的个数
+	fnums := len(secretData) - nopnums
+	msg := "[" + strconv.Itoa(fnums) + "/" + strconv.Itoa(len(secretData)) + "]"
 	if nopnums > 0 {
 		return 4, errors.New(msg)
 	}

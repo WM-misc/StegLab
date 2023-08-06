@@ -1,12 +1,15 @@
 package router
 
 import (
+	"crypto/md5"
 	"ctf/challenge"
 	"ctf/check"
 	"ctf/database"
 	"ctf/submit"
 	"errors"
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"io"
 	"net/http"
 )
 
@@ -39,8 +42,13 @@ func Router() *gin.Engine {
 			c.SetCookie("teamname", teamname, 3600, "/", "172.21.26.127", false, true)
 			DB.Where("token = ?", request.Token).First(&User)
 			if User.Token == "" {
+				h := md5.New()
+				io.WriteString(h, teamname)
+				namemd5 := fmt.Sprintf("%x", h.Sum(nil))
 				DB.Create(&database.User{
-					Token: token,
+					Token:    token,
+					TeamName: teamname,
+					NameMd5:  namemd5,
 				})
 			}
 
@@ -61,6 +69,7 @@ func Router() *gin.Engine {
 		auth.GET("/getchallenge/:cid", challenge.GetChallengeInfo)
 		auth.GET("/getchallengelist", challenge.GetChallengeList)
 		auth.GET("/isSolve/:cid", challenge.IsSolve)
+		auth.GET("/getflag/:cid", submit.GetFlag)
 	}
 	return r
 }

@@ -22,6 +22,7 @@ func SubmitDecryPython(c *gin.Context) {
 	teamname := c.Request.Header.Get("Teamname")
 	cid := c.Param("cid")
 	intcid, err := strconv.Atoi(cid)
+	md5path := GetMd5ByToken(token)
 	if err != nil {
 		c.JSON(400, gin.H{
 			"code": 400,
@@ -53,7 +54,7 @@ func SubmitDecryPython(c *gin.Context) {
 	code.DecryptCode = strings.Replace(code.DecryptCode, "\\r", "\r", -1)
 
 	decryfilename := "decry.py"
-	tokenpath := "/home/ctf/codefile/" + token + "/"
+	tokenpath := "/home/ctf/codefile/" + md5path + "/"
 	_, err = os.Stat(tokenpath)
 	if err != nil {
 		err = os.Mkdir(tokenpath, 0777)

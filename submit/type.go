@@ -6,6 +6,7 @@ var JsonNew = jsoniter.ConfigCompatibleWithStandardLibrary
 var DockerImage = "ctf:v1"
 var UUID = "fa1c7bea-b769-4520-87a1-5e0f0112b98c"
 var UserExistUrl = "https://flagserver.wm-team.cn/exist?uuid=" + UUID + "&teamtoken="
+var UserGetFlagUrl = "https://flagserver.wm-team.cn/getFlag?uuid=" + UUID + "&teamtoken="
 
 type TokenRequest struct {
 	Token    string `json:"token"`

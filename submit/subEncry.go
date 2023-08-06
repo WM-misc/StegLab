@@ -26,7 +26,7 @@ func SubmitEncryPythonByCid(c *gin.Context) {
 	teamname := c.Request.Header.Get("Teamname")
 	cid := c.Param("cid")
 	intcid, err := strconv.Atoi(cid)
-
+	md5path := GetMd5ByToken(token)
 	if err != nil {
 		c.JSON(400, gin.H{
 			"code": 400,
@@ -45,15 +45,12 @@ func SubmitEncryPythonByCid(c *gin.Context) {
 	code.EncryptCode = strings.Replace(code.EncryptCode, "\\t", "\t", -1)
 	code.EncryptCode = strings.Replace(code.EncryptCode, "\\r", "\r", -1)
 	encryfilename := "encry.py"
-	tokenpath := "/home/ctf/codefile/" + token + "/"
+	tokenpath := "/home/ctf/codefile/" + md5path + "/"
 	_, err = os.Stat(tokenpath)
 	if err != nil {
 		err = os.Mkdir(tokenpath, 0777)
 		if err != nil {
-			c.JSON(200, gin.H{
-				"code": WriteFileError,
-				"msg":  "创建文件夹失败",
-			})
+			fmt.Println(err)
 			return
 		}
 	}

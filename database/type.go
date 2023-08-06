@@ -3,8 +3,10 @@ package database
 import "time"
 
 type User struct {
-	ID    int    `gorm:"primaryKey"`
-	Token string `gorm:"column:token" json:"token"`
+	ID       int    `gorm:"primaryKey"`
+	Token    string `gorm:"column:token" json:"token"`
+	TeamName string `gorm:"column:teamname" json:"teamname"`
+	NameMd5  string `gorm:"column:name_md5" json:"name_md5"`
 	//IsEnCrypt bool   `gorm:"column:is_encrypt" json:"is_encrypt"` //是否已经编写了加密代码，编写了才可以继续编写解密代码
 	//IsSolved  bool   `gorm:"column:is_solved" json:"is_solved"`
 }
