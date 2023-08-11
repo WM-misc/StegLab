@@ -5,6 +5,7 @@ go 1.18
 require (
 	github.com/docker/docker v23.0.5+incompatible
 	github.com/gin-gonic/gin v1.9.0
+	github.com/json-iterator/go v1.1.12
 	gorm.io/driver/sqlite v1.5.0
 	gorm.io/gorm v1.25.1
 )
@@ -24,7 +25,6 @@ require (
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
-	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/cpuid/v2 v2.0.9 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/mattn/go-isatty v0.0.17 // indirect

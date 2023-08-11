@@ -8,9 +8,10 @@ import (
 	"ctf/submit"
 	"errors"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"io"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 func Router() *gin.Engine {
@@ -38,8 +39,8 @@ func Router() *gin.Engine {
 			return
 		}
 		if token != "" {
-			c.SetCookie("token", token, 3600, "/", "172.21.26.127", false, true)
-			c.SetCookie("teamname", teamname, 3600, "/", "172.21.26.127", false, true)
+			c.SetCookie("token", token, 3600, "/", "ctf.snowywar.top", false, true)
+			c.SetCookie("teamname", teamname, 3600, "/", "ctf.snowywar.top", false, true)
 			DB.Where("token = ?", request.Token).First(&User)
 			if User.Token == "" {
 				h := md5.New()
@@ -74,7 +75,7 @@ func Router() *gin.Engine {
 	return r
 }
 
-//允许跨域
+// 允许跨域
 func Cors() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		method := c.Request.Method
@@ -93,7 +94,7 @@ func Cors() gin.HandlerFunc {
 	}
 }
 
-//中间件
+// 中间件
 func AuthMiddleWare() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		//token, err := c.Cookie("token")

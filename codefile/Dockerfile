@@ -5,7 +5,7 @@ FROM python:3.8
 WORKDIR /app
 
 #换源
-RUN sed -i s@/deb.debian.org/@/mirrors.aliyun.com/@g /etc/apt/sources.list
+# RUN sed -i s@/deb.debian.org/@/mirrors.aliyun.com/@g /etc/apt/sources.list
 
 # 更新系统及安装相关依赖
 RUN apt-get update && apt-get install -y \
