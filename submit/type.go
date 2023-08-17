@@ -5,8 +5,12 @@ import jsoniter "github.com/json-iterator/go"
 var JsonNew = jsoniter.ConfigCompatibleWithStandardLibrary
 var DockerImage = "ctf:v1"
 var UUID = "8bb39bd7-6535-4cbc-8749-28c5bb690012"
+var UUID2 = "b55d1a82-e6f9-417f-a78e-1337570bbd26"
 var UserExistUrl = "https://flagserver.wm-team.cn/exist?uuid=" + UUID + "&teamtoken="
 var UserGetFlagUrl = "https://flagserver.wm-team.cn/getFlag?uuid=" + UUID + "&teamtoken="
+
+var UserExistUrl2 = "https://flagserver.wm-team.cn/exist?uuid=" + UUID2 + "&teamtoken="
+var UserGetFlagUrl2 = "https://flagserver.wm-team.cn/getFlag?uuid=" + UUID2 + "&teamtoken="
 
 type TokenRequest struct {
 	Token    string `json:"token"`

@@ -2,9 +2,10 @@ package submit
 
 import (
 	"ctf/database"
-	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 func GetMd5ByToken(token string) string {
@@ -24,17 +25,24 @@ func GetFlag(c *gin.Context) {
 	cid := c.Param("cid")
 	uid := GetIDByToken(token)
 	DB.Where("user_id = ? AND challenge_id = ?", uid, cid).First(&userChallenge)
+	var flagurl string
 
 	if userChallenge.IsSolved == true {
-		if cid != "2" {
+		//只有第二题第三题有flag
+		if cid == "2" {
+			flagurl = UserGetFlagUrl + token + "&teamname=" + teamname
+		}
+		if cid == "3" {
+			flagurl = UserGetFlagUrl2 + token + "&teamname=" + teamname
+		}
+		if cid != "2" && cid != "3" {
 			c.JSON(200, gin.H{
 				"code": Success,
 				"msg":  "获取flag成功",
-				"flag": "flag{flag}",
+				"flag": "flag{test_flag}",
 			})
 			return
 		}
-		flagurl := UserGetFlagUrl + token + "&teamname=" + teamname
 		resp, err := http.Get(flagurl)
 		if err != nil {
 			c.JSON(200, gin.H{
@@ -50,6 +58,7 @@ func GetFlag(c *gin.Context) {
 			"msg":  "获取flag成功",
 			"flag": data.Get("data").ToString(),
 		})
+
 	} else {
 		c.JSON(200, gin.H{
 			"code": SomeError,
