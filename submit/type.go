@@ -4,7 +4,7 @@ import jsoniter "github.com/json-iterator/go"
 
 var JsonNew = jsoniter.ConfigCompatibleWithStandardLibrary
 var DockerImage = "ctf:v1"
-var UUID = "fa1c7bea-b769-4520-87a1-5e0f0112b98c"
+var UUID = "8bb39bd7-6535-4cbc-8749-28c5bb690012"
 var UserExistUrl = "https://flagserver.wm-team.cn/exist?uuid=" + UUID + "&teamtoken="
 var UserGetFlagUrl = "https://flagserver.wm-team.cn/getFlag?uuid=" + UUID + "&teamtoken="
 
@@ -24,7 +24,7 @@ type DecryptCodeSubmit struct {
 
 const PNGPATH = "/home/ctf/codefile/png/"
 
-//定义返回code状态码
+// 定义返回code状态码
 const (
 	Success      = 0 //成功
 	SomeError    = 1 //部分成功

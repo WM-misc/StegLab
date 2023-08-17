@@ -4,12 +4,14 @@ import (
 	"ctf/check"
 	"ctf/database"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 func SubmitDecryPython(c *gin.Context) {
@@ -66,6 +68,32 @@ func SubmitDecryPython(c *gin.Context) {
 			return
 		}
 	}
+	//cp png/*_encry_attacked.png dest/
+	destpath := tokenpath + "dest/"
+	_, err = os.Stat(destpath)
+	if err != nil {
+		err = os.Mkdir(destpath, 0777)
+		if err != nil {
+			c.JSON(200, gin.H{
+				"code": WriteFileError,
+				"msg":  "创建文件夹失败",
+			})
+			return
+		}
+	}
+	// find /path/to/png -regextype posix-extended -regex '.*[0-9]_encry_attacked\.png$' -exec cp {} /path/to/dest/ \;
+	cmd := exec.Command("bash", "-c", "find "+tokenpath+"png -regextype posix-extended -regex '.*[0-9]_encry_attacked\\.png$' -exec cp {} "+destpath+" \\;")
+	// cmd := exec.Command("bash", "-c", "cp "+srcpath+" "+destpath)
+	err = cmd.Run()
+	if err != nil {
+		c.JSON(200, gin.H{
+			"code": WriteFileError,
+			"msg":  "复制文件失败",
+			"err":  err.Error(),
+		})
+		return
+	}
+
 	decryfilepath := tokenpath + decryfilename
 	//拼接代码
 	finalcode := DecryptCodeSplicing(code.DecryptCode)
@@ -168,7 +196,7 @@ func CreateBash2(secret string) string {
 	bash := "#!/bin/bash\nset -e\n"
 	for i, _ := range secretlist {
 		//python decry.py png
-		bash += fmt.Sprintf("python decry.py %s\n", "png/"+strconv.Itoa(i+1)+"_encry_attacked.png")
+		bash += fmt.Sprintf("python decry.py %s\n", "dest/"+strconv.Itoa(i+1)+"_encry_attacked.png")
 	}
 	return bash
 }

@@ -5,14 +5,15 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"net/http"
+	"time"
+
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/api/types/mount"
 	"github.com/docker/docker/client"
 	"github.com/docker/docker/pkg/stdcopy"
-	"io/ioutil"
-	"net/http"
-	"time"
 )
 
 func IsTokenValid(teamToken string, teamName string) bool {
@@ -135,7 +136,11 @@ func RunEncry(tokenpath string, dockerImage string) (int, string, time.Duration,
 		return DockerError, "", 0, 0, err
 	}
 	if stderr.String() != "" {
-		return CompileError, stderr.String(), 0, 0, nil
+		errorMessage := stderr.String()
+		if len(errorMessage) > 30 {
+			errorMessage = errorMessage[:30]
+		}
+		return CompileError, errorMessage, 0, 0, nil
 	}
 
 	maxMemUsage := <-memUsageChan
@@ -151,7 +156,7 @@ func RunDecry(tokenpath string, dockerImage string) (int, string, time.Duration,
 	startTime := time.Now()
 	memUsageChan := make(chan uint64, 1)
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	cli, err := client.NewClientWithOpts(client.FromEnv)
@@ -248,7 +253,12 @@ func RunDecry(tokenpath string, dockerImage string) (int, string, time.Duration,
 		return DockerError, "", 0, 0, err
 	}
 	if stderr.String() != "" {
-		return CompileError, stderr.String(), 0, 0, nil
+		//限制stderr长度为30字符串
+		errorMessage := stderr.String()
+		if len(errorMessage) > 30 {
+			errorMessage = errorMessage[:30]
+		}
+		return CompileError, errorMessage, 0, 0, nil
 	}
 
 	maxMemUsage := <-memUsageChan

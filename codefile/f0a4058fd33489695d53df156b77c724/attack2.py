@@ -7,8 +7,12 @@ import random
 
 def attack(img):
     img = Image.open(img)
-    draw = ImageDraw.Draw(img)
     a,b = img.size
+    draw = Image.new('RGB', (a,b), (255,255,255))
+    for i in range(a):
+        for j in range(b):
+            draw.putpixel((i,j), img.getpixel((i,j)))
+    
     x1 = random.randint(0,a//2)
     y1 = 0
     x2 = random.randint(a//2,a)

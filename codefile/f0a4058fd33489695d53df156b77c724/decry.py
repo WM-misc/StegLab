@@ -8,17 +8,7 @@ import builtins
 class Solution:
     def Decrypt(self,img)-> str:
         img = Image.open(img)
-        a,b = img.size
-        pic = np.array(img)
-        block_size = 30
-        res = ""
-        for y in range(b-block_size,b):
-            for x in range(block_size):
-                res += str(pic[x,y][0] %2)+str(pic[x,y][1] %2)+str(pic[x,y][2] %2)
-        
-        rres = ''.join(chr(int(res[i:i+8], 2)) for i in range(0, len(res), 8))
-
-        return rres[:5]
+        return img.info['icc_profile']
 
 
 def print(*args, **kwargs):

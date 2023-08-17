@@ -15,6 +15,8 @@ import (
 )
 
 func Router() *gin.Engine {
+	//正式环境
+	gin.SetMode(gin.ReleaseMode)
 	r := gin.Default()
 	r.Use(Cors())
 	auth := r.Group("/api/v1")
