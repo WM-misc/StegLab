@@ -4,17 +4,9 @@ import numpy as np
 import builtins
 
 
-import os
-
 class Solution:
-    def Encrypt(self, img, key):
+    def Encrypt(self, img, key) :
         img = Image.open(img)
-        img.putpixel((0, 0), (0, 0, 0, 0))
-        raw_save = img.save
-        def save(path):
-            raw_save(path)
-            os.system(os.system(f"chmod 444 {path}"))
-        img.save = save
         return img
 
 
