@@ -3,6 +3,7 @@ package submit
 import (
 	"bytes"
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -16,7 +17,29 @@ import (
 	"github.com/docker/docker/pkg/stdcopy"
 )
 
+func IsTokenValid2(teamToken string, teamName string) bool {
+
+	url := UserExistUrl + teamToken + "&teamname=" + teamName
+	resp, err := http.Get(url)
+	if err != nil {
+		return false
+	}
+	defer resp.Body.Close()
+	d1, _ := ioutil.ReadAll(resp.Body)
+	data := JsonNew.Get(d1)
+
+	if data.Get("data").ToBool() == true {
+		return true
+	} else {
+		return false
+	}
+}
+
 func IsTokenValid(teamToken string, teamName string) bool {
+
+	dteamname, _ := base64.StdEncoding.DecodeString(teamName)
+	teamName = string(dteamname)
+	fmt.Println(teamName)
 	url := UserExistUrl + teamToken + "&teamname=" + teamName
 	resp, err := http.Get(url)
 	if err != nil {

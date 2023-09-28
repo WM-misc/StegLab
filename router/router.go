@@ -36,7 +36,7 @@ func Router() *gin.Engine {
 			return
 		}
 
-		if submit.IsTokenValid(token, teamname) != true {
+		if submit.IsTokenValid2(token, teamname) != true {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "无效的Token"})
 			return
 		}
@@ -47,6 +47,7 @@ func Router() *gin.Engine {
 			if User.Token == "" {
 				h := md5.New()
 				io.WriteString(h, teamname)
+				// 将teamname进行base64解码
 				namemd5 := fmt.Sprintf("%x", h.Sum(nil))
 				DB.Create(&database.User{
 					Token:    token,

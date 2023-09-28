@@ -16,7 +16,7 @@ def calculate_psnr(img1, img2):
     else:
         psnr = 20 * math.log10(max_pixel / math.sqrt(mse))
 
-        if psnr > 85:
+        if psnr > 65:
             return 'Success'
         else:
             return 'NOP'

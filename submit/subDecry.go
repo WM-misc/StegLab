@@ -94,6 +94,18 @@ func SubmitDecryPython(c *gin.Context) {
 		return
 	}
 
+	//删除原图片目录
+	cmd = exec.Command("bash", "-c", "rm -rf "+tokenpath+"png")
+	err = cmd.Run()
+	if err != nil {
+		c.JSON(200, gin.H{
+			"code": WriteFileError,
+			"msg":  "删除文件失败",
+			"err":  err.Error(),
+		})
+		return
+	}
+
 	decryfilepath := tokenpath + decryfilename
 	//拼接代码
 	finalcode := DecryptCodeSplicing(code.DecryptCode)

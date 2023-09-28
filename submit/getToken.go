@@ -2,6 +2,7 @@ package submit
 
 import (
 	"ctf/database"
+	"encoding/base64"
 	"io/ioutil"
 	"net/http"
 
@@ -26,7 +27,8 @@ func GetFlag(c *gin.Context) {
 	uid := GetIDByToken(token)
 	DB.Where("user_id = ? AND challenge_id = ?", uid, cid).First(&userChallenge)
 	var flagurl string
-
+	dteamname, _ := base64.StdEncoding.DecodeString(teamname)
+	teamname = string(dteamname)
 	if userChallenge.IsSolved == true {
 		//只有第二题第三题有flag
 		if cid == "2" {
